@@ -32,7 +32,7 @@ void * read_thread(void *filename)
 	while(fread(buf, 1, 1, fp) != 0) {
 	    // do stuff
 	}
-	printf("Finished reading 1!\n");
+//	printf("Finished reading 1!\n");
 	fclose(fp);
 /*	
 	fp = fopen(filename, "r");
@@ -56,35 +56,33 @@ void * read_thread(void *filename)
 
 void * start_thread_fsync(void *filename)
 {
-	printf("%s\n", (const char *) filename);
+//	printf("%s\n", (const char *) filename);
 	int f = open(filename, O_RDWR | O_CREAT);
 	char *buf = NULL;
 	int i;
 	buf = malloc(1024 * 4);
 	memset (buf, 0xcafe, 1024 *4);
 
-        //lseek (f, 0, SEEK_SET);
-        //int records = 10*1000;
-	//while(1) {
-	        for(i = 0; i < 2000; i++) {
-					// time start
-					gettimeofday(&delay_start_point, NULL);
-        	        write(f, buf, 1024 * 4);
-                	fsync(f);
-					// time end
-					gettimeofday(&delay_end_point, NULL);
-					delaying_time += (double)(delay_end_point.tv_sec) +
-						(double)(delay_end_point.tv_usec) / 1000000.0 - 
-						(double)(delay_start_point.tv_sec) - (double)(delay_start_point.tv_usec) / 1000000.0;
-        	}
-	//}
+    //lseek (f, 0, SEEK_SET);
+	//int records = 10*1000;
+	for(i = 0; i < 2000; i++) {
+		// time start
+		gettimeofday(&delay_start_point, NULL);
+		write(f, buf, 1024 * 4);
+		fsync(f);
+		// time end
+		gettimeofday(&delay_end_point, NULL);
+		delaying_time += (double)(delay_end_point.tv_sec) +
+			(double)(delay_end_point.tv_usec) / 1000000.0 - 
+			(double)(delay_start_point.tv_sec) - (double)(delay_start_point.tv_usec) / 1000000.0;
+	}
 	close (f);
 	return filename;
 }
 
 void * start_thread_fdatasync(void *filename)
 {
-	printf("%s\n", (const char *) filename);
+//	printf("%s\n", (const char *) filename);
 	
 	int f = open(filename, O_RDWR | O_CREAT | O_APPEND);
 	char *buf = NULL;

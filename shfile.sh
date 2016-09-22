@@ -16,4 +16,4 @@ sudo kill -15 $TRACE_PID
 #sudo kill -15 $PARSE_PID
 
 echo "blktrace finish"
-ps -ef
+#ps -ef
