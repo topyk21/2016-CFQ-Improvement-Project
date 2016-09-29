@@ -3,7 +3,8 @@ echo "bash shell start"
 
 whoami
 #sudo blktrace -d /dev/sda -a queue -a issue -a complete -o - | blkparse -i - > result.txt & #-o ./result &
-sudo blktrace -d /dev/sda -o - | blkparse -i - > result.txt & #-o ./result &
+#sudo blktrace -d /dev/sda -o - | blkparse -i - > result.txt & #-o ./result &
+blktrace -d /dev/sda -a complete -o - | blkparse -f "%5T.%9t\t%d\n" -i - -o cfq250.txt &
 #PARSE_PID=$(pgrep blkparse)
 #echo $PARSE_PID
 sleep 2

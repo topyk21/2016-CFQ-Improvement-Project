@@ -11,7 +11,7 @@
 #include <sys/time.h>
 #include <time.h>
 
-#define READ_BUF_SIZE 128
+#define READ_BUF_SIZE 4096
 #define WRITE_BUF_SIZE 4096
 
 const char* journal_filename = "journal.log";
@@ -38,6 +38,7 @@ void * read_thread(void *filename)
 	while(fread(buf, READ_BUF_SIZE, 1, fp) != 0) {
 	    // do stuff
 	}
+
 	printf("Finished reading 1!\n");
 	fclose(fp);
 /*	
@@ -78,7 +79,7 @@ void * start_thread_fsync(void *filename)
 	//int records = 10*1000;
 	for(i = 0; i < 1000; i++) {
 		// time start
-//		gettimeofday(&delay_start_point, NULL);
+		gettimeofday(&delay_start_point, NULL);
 
 		switch (i % 2) {
 		case 0:
@@ -92,10 +93,10 @@ void * start_thread_fsync(void *filename)
 		}
 		fsync(f);
 		// time end
-//		gettimeofday(&delay_end_point, NULL);
-//		delaying_time += (double)(delay_end_point.tv_sec) +
-//			(double)(delay_end_point.tv_usec) / 1000000.0 - 
-//			(double)(delay_start_point.tv_sec) - (double)(delay_start_point.tv_usec) / 1000000.0;
+		gettimeofday(&delay_end_point, NULL);
+		delaying_time += (double)(delay_end_point.tv_sec) +
+			(double)(delay_end_point.tv_usec) / 1000000.0 - 
+			(double)(delay_start_point.tv_sec) - (double)(delay_start_point.tv_usec) / 1000000.0;
 	}
 //	fsync(f);
 	printf("Write finish!\n");
@@ -179,8 +180,8 @@ int main(void)
 //	printf("Finish Time: %ld\n", endTime);
 //	printf("Time Interval: %lf\n", (double)(endTime - startTime) / CLOCKS_PER_SEC);
 	printf("TIME : %f\n", operating_time);
-//	printf("FSYNC DELAY : %f\n", delaying_time);
-//	printf("AVEG FSYNC DELAY : %f\n", delaying_time / 2000);
+	printf("FSYNC DELAY : %f\n", delaying_time);
+	printf("AVEG FSYNC DELAY : %f\n", delaying_time / 2000);
 	//sync();
 	return 0;
 }
